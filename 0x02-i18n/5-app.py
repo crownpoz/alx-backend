@@ -48,3 +48,25 @@ def before_request():
     '''
     user = get_user()
     g.user = user
+
+@app.route('/', methods=['GET'], strict_slashes=False)
+def helloWorld() -> str:
+    '''
+        Render template for Babel usage.
+    '''
+    return render_template('5-index.html')
+
+
+@babel.localeselector
+def get_locale() -> str:
+    '''
+        Get user locale to serve matching translation.
+    '''
+    locale = request.args.get('locale')
+    if locale in app.config['LANGUAGES']:
+        return locale
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
+
+
+if __name__ == '__main__':
+    app.run()
